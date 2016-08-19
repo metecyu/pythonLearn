@@ -13,13 +13,18 @@ class GetHandler(BaseHTTPRequestHandler):
         self.send_response(200)
         self.end_headers()
         content = time.strftime('%Y-%m-%d %X',time.localtime(time.time()))+"<br><br>"
-        content += self.getTargetStr('btCoin')+"<br>"
+           
+        content += self.getTargetStr('btCoin')+"<br>"     
+        content += "<br>" 
+        content += self.getTargetStr('rmb')+"<br>"
+        content += self.getTargetStr('gold')+"<br>"
+        content += self.getTargetStr('nasdaq')+"<br>"        
+        content += "<br>" 
         content += self.getTargetStr('gf_Yl')+"<br>"
         content += self.getTargetStr('gf_hs300')+"<br>"
         content += self.getTargetStr('gf_fdc')+"<br>"
         content += self.getTargetStr('gf_nadk')+"<br>"
-        content += self.getTargetStr('gold')+"<br>"
-        content += self.getTargetStr('rmb')+"<br>"
+
 
 
         htmlStr = '<!DOCTYPE html><html>'

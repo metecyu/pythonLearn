@@ -17,7 +17,7 @@ db = redis.Redis(host='localhost',port=6379,db=0)
 def fetchOne(targetId,targetName,targetUrl,regStr):    
 
 
-  #hea是我们自己构造的一个字典，里面保存了user-agent
+  #head 
   head = {'User-Agent':'Mozilla/5.0 (Windows NT 6.3; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2272.118 Safari/537.36'}
   html = ''
   try:
@@ -25,12 +25,16 @@ def fetchOne(targetId,targetName,targetUrl,regStr):
   except IOError:
     return 
   #print html.status_code
-  html.encoding = 'utf-8' #这一行是将编码转为utf-8否则中文会显示乱码。 
+  html.encoding = 'utf-8' #set utf-8 
   prices = re.findall(regStr,html.text,re.S)
   
   targetPrice = ''
   for priceTemp in prices:
-      targetPrice = priceTemp
+      # filter char ',' in money 
+      priceTemp = priceTemp.replace(',' , '') 
+      # round to two decimals
+      pos = priceTemp.index('.')      
+      targetPrice = priceTemp[0:pos+3]
 
   targetName = targetName.encode('utf-8')
   targetPrice = targetPrice.encode('utf-8')
@@ -39,14 +43,15 @@ def fetchOne(targetId,targetName,targetUrl,regStr):
   db.set(targetId+':name',targetName)
   db.set(targetId+':price',targetPrice)
   
-
-fetchOne('btCoin',u'比特币:','https://www.okcoin.cn','<em class="indexBtcPrice">(.*?)</em>')
-fetchOne('gf_Yl',u'广发医疗:','http://fund.eastmoney.com/001180.html','id="gz_gsz">(.*?)</span>')
-fetchOne('gf_hs300',u'广发沪深300:','http://fund.eastmoney.com/270010.html','id="gz_gsz">(.*?)</span>')
-fetchOne('gf_fdc',u'广发美国房地产:','http://fund.eastmoney.com/000179.html','id="gz_gsz">(.*?)</span>')
-fetchOne('gf_nadk',u'广发美纳斯达克:','http://fund.eastmoney.com/270042.html','id="gz_gsz">(.*?)</span>')
 fetchOne('gold',u'黄金:','http://www.cngold.org/xhhj/','class=\'JO_38493q63\'>(.*?)</td>')
 fetchOne('rmb',u'人民币:','http://www.x-rates.com/table/?from=CNY&amount=1','href=\'/graph/\?from=USD&amp;to=CNY\'>(.*?)</a>')
+fetchOne('nasdaq',u'纳斯达克:','https://gupiao.baidu.com/stock/us@CCO.html?from=aladingpc','<strong  class="_close">(.*?)</strong>')
+fetchOne('btCoin',u'比特币:','https://www.okcoin.cn','<em class="indexBtcPrice">(.*?)</em>')
+fetchOne('gf_Yl',u'广发医疗:','http://fund.eastmoney.com/001180.html','id="gz_gsz">(.*?)</span>')
+fetchOne('gf_hs300',u'广发沪深三百:','http://fund.eastmoney.com/270010.html','id="gz_gsz">(.*?)</span>')
+fetchOne('gf_fdc',u'广发房地产:','http://fund.eastmoney.com/000179.html','id="gz_gsz">(.*?)</span>')
+fetchOne('gf_nadk',u'广发纳斯达克:','http://fund.eastmoney.com/270042.html','id="gz_gsz">(.*?)</span>')
+
 
 
 
