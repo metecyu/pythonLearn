@@ -31,10 +31,12 @@ def fetchOne(targetId,targetName,targetUrl,regStr):
   targetPrice = ''
   for priceTemp in prices:
       # filter char ',' in money 
+      #print(priceTemp.encode('utf-8'))  
       priceTemp = priceTemp.replace(',' , '') 
       # round to two decimals
-      pos = priceTemp.index('.')      
-      targetPrice = priceTemp[0:pos+3]
+      #pos = priceTemp.index('.')      
+      #targetPrice = priceTemp[0:pos+3]
+      targetPrice = priceTemp
 
   targetName = targetName.encode('utf-8')
   targetPrice = targetPrice.encode('utf-8')
@@ -46,7 +48,7 @@ def fetchOne(targetId,targetName,targetUrl,regStr):
 fetchOne('gold',u'黄金:','http://www.cngold.org/xhhj/','class=\'JO_38493q63\'>(.*?)</td>')
 fetchOne('rmb',u'人民币:','http://www.x-rates.com/table/?from=CNY&amount=1','href=\'/graph/\?from=USD&amp;to=CNY\'>(.*?)</a>')
 fetchOne('nasdaq',u'纳斯达克:','https://gupiao.baidu.com/stock/us@CCO.html?from=aladingpc','<strong  class="_close">(.*?)</strong>')
-fetchOne('btCoin',u'比特币:','https://www.okcoin.cn','<em class="indexBtcPrice">(.*?)</em>')
+fetchOne('btCoin',u'比特币:','http://www.btctrade.com','id="rate-btc">(.*?)</i>')
 fetchOne('gf_Yl',u'广发医疗:','http://fund.eastmoney.com/001180.html','id="gz_gsz">(.*?)</span>')
 fetchOne('gf_hs300',u'广发沪深三百:','http://fund.eastmoney.com/270010.html','id="gz_gsz">(.*?)</span>')
 fetchOne('gf_fdc',u'广发房地产:','http://fund.eastmoney.com/000179.html','id="gz_gsz">(.*?)</span>')
